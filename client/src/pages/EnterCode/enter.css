@@ -1,0 +1,9 @@
+.fix-btn-again {
+    box-shadow: rgba(133,151,108,1) 0px 2px;
+  }
+  
+  .fix-btn-again:hover {
+    box-shadow: rgba(133,151,108,1) 0px 4px;
+    background-color: rgb(179,199,153);
+    scale: (1,2);
+  }

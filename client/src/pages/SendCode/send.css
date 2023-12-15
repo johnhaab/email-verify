@@ -30,3 +30,13 @@
   --reactive-progress-outline-violet-color: rgba(100, 53, 201, 0.3) !important;
   --reactive-progress-outline-blue-color: rgba(66, 153, 225, 0.3) !important;
 }
+
+.fix-btn  {
+  box-shadow: rgba(2,106,159,1) 0px 2px;
+}
+
+.fix-btn:hover {
+  box-shadow: rgba(2,106,159,1) 0px 4px;
+  background-color: rgb(40,150,207);
+  scale: (1,2);
+}

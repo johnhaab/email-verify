@@ -16,4 +16,6 @@ model Code {
   createdAt      DateTime @default(now())
   expirationTime Int
   email          String
+  active         Boolean  @default(true)
+  activatedIp    String?
 }

@@ -5,6 +5,7 @@ CREATE TABLE "Code" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expirationTime" INTEGER NOT NULL,
     "email" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Code_pkey" PRIMARY KEY ("id")
 );

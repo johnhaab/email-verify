@@ -12,6 +12,8 @@ const jsonParser = bodyParser.json();
 
 app.use(jsonParser);
 
+app.set("trust proxy", true);
+
 app.use(cors());
 
 app.use("/api", mainRoute);
