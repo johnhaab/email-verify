@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-require("dotenv").config;
+require("dotenv").config();
 
 // create reusable transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
@@ -8,8 +8,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: `${proccess.env.SMTP_GMAIL}`,
-    pass: `${proccess.env.SMTP_GMAIL_PASS}`,
+    user: `${process.env.SMTP_GMAIL}`,
+    pass: `${process.env.SMTP_GMAIL_PASS}`,
   },
 });
 
