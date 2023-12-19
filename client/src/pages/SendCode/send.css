@@ -32,11 +32,10 @@
 }
 
 .fix-btn  {
-  box-shadow: rgba(2,106,159,1) 0px 2px;
+  box-shadow: #06905E 0px 4px;
 }
 
 .fix-btn:hover {
-  box-shadow: rgba(2,106,159,1) 0px 4px;
-  background-color: rgb(40,150,207);
-  scale: (1,2);
+  box-shadow: #06905E 0px 4px;
+  scale: (0.2,2);
 }
