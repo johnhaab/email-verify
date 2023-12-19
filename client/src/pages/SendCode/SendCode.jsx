@@ -4,7 +4,7 @@ import checkEmail from "../../util/checkEmail";
 import { useNavigate } from "react-router-dom";
 import ReactiveButton from "reactive-button";
 import HandleErrorResponse from "../../components/HandleErrorResponse";
-import Swal from "sweetalert2";
+import WaterMark from "../../components/WaterMark";
 import axios from "axios";
 import "./send.css";
 
@@ -13,32 +13,25 @@ const SendCode = () => {
   const [buttonStatus, setButtonStatus] = useState("idle");
   const navigate = useNavigate();
 
-  // Grabbing the correct port for the server.
-  const backendPort = import.meta.env.VITE_REACT_APP_BACKEND_PORT;
+  // Grabbing the correct ip and port for the server.
+  const serverPort = import.meta.env.VITE_REACT_APP_SERVER_PORT;
+  const ipAddress = import.meta.env.VITE_REACT_APP_IP_ADDRESS;
 
   const sendEmailCode = async (email) => {
     setButtonStatus("loading");
     // Function to send the code to the users email input.
 
     if (checkEmail(email) === false) {
-      setButtonStatus("error");
       // If the email is not valid, this displays an error message.
+      setButtonStatus("error");
 
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Please enter a valid email address",
-        showConfirmButton: true,
-        timer: 3000,
-        timerProgressBar: true,
-      });
-      return;
+      HandleErrorResponse("Please enter a valid email address.");
     } else {
       // If the email is valid, send the code to the users email.
 
       try {
         axios
-          .post(`http://localhost:${backendPort}/api/send-code`, {
+          .post(`http://${ipAddress}:${serverPort}/api/send-code`, {
             email: email,
           })
           .then(function (response) {
@@ -53,57 +46,80 @@ const SendCode = () => {
           })
           .catch(function (err) {
             // Handle error state.
+            console.log(err);
+            console.log(email);
 
             setButtonStatus("error");
-            HandleErrorResponse(err.response.data);
+            HandleErrorResponse(err);
           });
       } catch (err) {
         // Handle error state.
 
         setButtonStatus("error");
-        HandleErrorResponse(err.response.data);
+        HandleErrorResponse(err);
       }
     }
   };
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen md:flex-row md:gap-10">
+        <div className="flex absolute top-8 gap-5 block md:hidden">
+          <button
+            className="hover:scale-105 fix-btn transition-all text-white rounded-md px-4 py-3 font-semibold"
+            onClick={() => {
+              navigate("/check-code");
+            }}
+          >
+            already have a code?
+          </button>
+          {localStorage.getItem("lastId") !== null ? (
+            <button
+              className="fix-btn hover:scale-105 transition-all text-white rounded-md px-4 py-3 font-semibold"
+              onClick={() => {
+                navigate("/success");
+              }}
+            >
+              view your last code&apos;s data
+            </button>
+          ) : null}
+        </div>
         <button
-          className="fix-btn absolute top-5 bg-[#0284C7] hover:scale-105 transition-all text-white rounded-md px-4 py-3 font-semibold"
+          className="hover:scale-105 hidden md:block fix-btn transition-all text-white rounded-md px-4 py-3 font-semibold"
           onClick={() => {
             navigate("/check-code");
           }}
         >
           already have a code?
         </button>
-        <input
-          type="email"
-          placeholder="enter your email"
-          className="border-gray-400 w-min rounded-md border-2 text-center px-3 py-2.5 font-semibold mb-3"
-          onInput={(e) => setEmail(e.target.value)}
-        />
-        <ReactiveButton
-          buttonState={buttonStatus}
-          idleText="send code"
-          loadingText="sending"
-          successText="sent"
-          errorText="try again"
-          onClick={() => sendEmailCode(email)}
-          className="rounded-md bg-sky-600 hover:scale-105 transition-all"
-          style={{
-            borderRadius: "5px",
-            "font-weight": "semibold",
-          }}
-        />
-        <button
-          className="fix-btn absolute bottom-8 hover:scale-105 transition-all bg-[#0284C7] text-white rounded-md px-4 py-3 font-semibold"
-          onClick={() => {
-            navigate("/success");
-          }}
-        >
-          view your last code&apos;s data
-        </button>
+        <div className="flex flex-col">
+          <input
+            type="email"
+            placeholder="example@email.com"
+            className="focus:outline-[#01B170] active:scale-105 hover:scale-105 h-[47px] bg-[#f5f5f5] delay-75 transition-all border-gray-400 w-min rounded-md border-2 text-center px-3 py-2.5 font-semibold mb-3"
+            onInput={(e) => setEmail(e.target.value)}
+          />
+          <ReactiveButton
+            buttonState={buttonStatus}
+            idleText="send code"
+            loadingText="sending"
+            successText="sent"
+            errorText="try again"
+            onClick={() => sendEmailCode(email)}
+            className="hover:scale-105 fix-btn rounded-md bg-[#01b170] transition-all h-[125%] font-semibold"
+          />
+        </div>
+        {localStorage.getItem("lastId") !== null ? (
+          <button
+            className="hidden md:block fix-btn hover:scale-105 transition-all text-white rounded-md px-4 py-3 font-semibold"
+            onClick={() => {
+              navigate("/success");
+            }}
+          >
+            view your last code&apos;s data
+          </button>
+        ) : null}
+        <WaterMark />
       </div>
     </>
   );

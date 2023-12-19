@@ -1,116 +1,110 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactiveButton from "reactive-button";
 import HandleErrorResponse from "../../components/HandleErrorResponse";
-import Swal from "sweetalert2";
+import HandleSuccessResponse from "../../components/HandleSuccessResponse";
+import ComingSoon from "../../components/ComingSoon";
+import WaterMark from "../../components/WaterMark";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./enter.css";
 
 const EnterCode = () => {
   const [code, setCode] = useState("");
   const [buttonStatus, setButtonStatus] = useState("idle");
+
   const navigate = useNavigate();
 
-  // Grabbing the correct port for the server.
-  const backendPort = import.meta.env.VITE_REACT_APP_BACKEND_PORT;
+  // Grabbing the correct ip and port for the server.
+  const serverPort = import.meta.env.VITE_REACT_APP_SERVER_PORT;
+  const ipAddress = import.meta.env.VITE_REACT_APP_IP_ADDRESS;
 
   const email = localStorage.getItem("emailUsed");
 
   const verifyCode = async () => {
     setButtonStatus("loading");
     // Function to verify the code provided by the user.
-
     if (code.length !== 6) {
       setButtonStatus("error");
       // Display error message if the code is not 6 digits.
       // Using Swal package to speed up dev process with alerts.
 
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Please enter a valid 6-digit code",
-        showConfirmButton: true,
-        timer: 3000,
-        timerProgressBar: true,
-      });
+      // HandleErrorResponse();
+      alert("code needs to be exactly 6 digits");
       return;
     }
-
     try {
       // Check the code against the database, searching with the code provided,
       // and with the email saved in localStorage.
-
       const response = await axios.post(
-        `http://localhost:${backendPort}/api/check-code`,
+        `http://${ipAddress}:${serverPort}/api/check-code`,
         {
           email,
           code,
         }
       );
-
-      console.log(response);
-
       if (response.data.success === false) {
         // Display error message if the server response indicates failure
-        // Using Swal package to speed up dev process with alerts.
+        setButtonStatus("idle");
 
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: `Whoops! Something went wrong, ${response.data.message} Error code: ${response.error}`,
-          showConfirmButton: true,
-          timer: 3000,
-          timerProgressBar: true,
-        });
+        // HandleErrorResponse();
+        alert("error fetching data from server");
       } else if (response.data.success === true) {
-        HandleErrorResponse(response.data.data);
-        navigate("/success");
+        setButtonStatus("success");
+        HandleSuccessResponse(
+          response.data.data,
+          "Code verified successfully!",
+          navigate
+        );
       }
     } catch (err) {
       setButtonStatus("error");
-      HandleErrorResponse(err.response.data);
+      HandleErrorResponse(err);
     }
   };
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center h-screen">
+      <div className="md:flex-row flex flex-col justify-center items-center h-screen">
         <button
-          className="fix-btn-again transition-all hover:scale-105 absolute top-0 mt-4 bg-[#A6BD87] px-4 py-3 font-semibold text-white rounded-md"
+          className="md:relative hover:scale-105 md:-mt-[65px] fix-btn transition-all absolute top-8 bg-[#01B170] px-4 py-[11px] font-semibold text-white rounded-md"
           onClick={() => {
             navigate("/");
           }}
         >
-          return to homepage
+          back to homepage
         </button>
-        <div className="flex flex-col justify-center items-center">
+        <div className="md:justify-between md:flex-row flex flex-col w-fit justify-between items-start">
           <input
             type="number"
-            placeholder="enter your code"
-            className="hover:scale-105 transition-all active:scale-105 placeholder:text-zinc-400 border-zinc-400 w-full rounded-md border-2 text-center px-3 py-2.5 font-semibold mb-4"
+            placeholder="enter code"
+            className="hover:scale-105 h-[47px] focus:outline-[#01B170] md:mx-5 bg-[#f5f5f5] mx-0 delay-75 transition-all active:scale-105 placeholder:text-zinc-400 border-zinc-400 w-full rounded-md border-2 text-center px-3 py-2.5 font-semibold"
             onInput={(e) => setCode(e.target.value)}
           />
-          <div className="flex justify-between w-full">
+          <div className="flex justify-between items-center w-full mt-3">
             <ReactiveButton
               buttonState={buttonStatus}
-              idleText="submit"
-              loadingText="checking"
+              idleText="verify"
+              loadingText="loading"
               successText="success"
               errorText="try again"
               onClick={() => verifyCode()}
-              style={{
-                borderRadius: "5px",
-                "font-weight": "semibold",
-                "background-color": "rgba(77, 124, 15, 0.5)",
-              }}
+              className="hover:scale-105 md:hover:-translate-y-3 md:-mt-3 fix-btn h-[140%] text-base bg-[#01B170] transition-all font-semibold rounded-md"
             />
-            <button className="text-[#A6BD87] font-semibold hover:scale-105 transition-all">
+            <button
+              className="hover:scale-105 md:hidden hover:text-[#01B170] mt-2 block text-zinc-400 rounded-md font-semibold transition-all"
+              onClick={() => ComingSoon("resend button", "#01B170")}
+            >
               resend
             </button>
           </div>
         </div>
+        <WaterMark />
       </div>
+      <ToastContainer />
     </>
   );
 };
