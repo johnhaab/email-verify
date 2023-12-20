@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import checkEmail from "../../util/checkEmail";
+import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ReactiveButton from "reactive-button";
 import HandleErrorResponse from "../../components/HandleErrorResponse";
@@ -25,7 +26,7 @@ const SendCode = () => {
       // If the email is not valid, this displays an error message.
       setButtonStatus("error");
 
-      HandleErrorResponse("Please enter a valid email address.");
+      HandleErrorResponse("error", "Please enter a valid email address.");
     } else {
       // If the email is valid, send the code to the users email.
 
@@ -121,6 +122,7 @@ const SendCode = () => {
         ) : null}
         <WaterMark />
       </div>
+      <ToastContainer />
     </>
   );
 };

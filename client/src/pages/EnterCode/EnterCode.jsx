@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import ReactiveButton from "reactive-button";
 import HandleErrorResponse from "../../components/HandleErrorResponse";
 import HandleSuccessResponse from "../../components/HandleSuccessResponse";
-import ComingSoon from "../../components/ComingSoon";
 import WaterMark from "../../components/WaterMark";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
@@ -96,7 +95,7 @@ const EnterCode = () => {
             />
             <button
               className="hover:scale-105 md:hidden hover:text-[#01B170] mt-2 block text-zinc-400 rounded-md font-semibold transition-all"
-              onClick={() => ComingSoon("resend button", "#01B170")}
+              // onClick={() => ComingSoon("resend button", "#01B170")}
             >
               resend
             </button>
