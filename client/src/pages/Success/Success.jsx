@@ -26,10 +26,10 @@ const Success = () => {
       </button>
       {data.id !== null ? (
         <>
-          <h1 className="font-bold flex justify-center items-center text-center">
+          <h1 className="font-bold flex justify-center items-center text-center text-zinc-400">
             Here&apos;s some info about the last code you verified:
           </h1>
-          <div className="p-5 rounded-md font-semibold text-center">
+          <div className="p-5 rounded-md font-semibold text-center text-zinc-400">
             <p>
               ID: <span className="text-[#01b170] font-bold">{data.id}</span>
             </p>

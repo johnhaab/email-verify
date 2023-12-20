@@ -24,7 +24,7 @@ app.post("/send-code", async (req, res) => {
 
   // Email options including sender, receiver, subject, code, and HTML content
   const options = {
-    from: "VERIFY CODE <jvhnbiz@gmail.com>",
+    from: `Email-Verify <${process.env.SMTP_GMAIL}>`,
     to: email,
     subject: "Here is your code!",
     code: newCode,
@@ -43,8 +43,6 @@ app.post("/send-code", async (req, res) => {
 
     // Send the verification email
     sendMail(options, (info) => {
-      console.log("Email sent successfully");
-      console.log("MESSAGE ID: ", info.messageId);
 
       // Respond with success and message ID
       res.json({ success: true, id: info.messageId, code: newCode });
@@ -81,7 +79,6 @@ app.post("/check-code", async (req, res, next) => {
     res.status(404).send({
       success: false,
       message: "No email found, try resending the email.",
-      error: 5,
     });
   } else {
     try {
@@ -98,7 +95,6 @@ app.post("/check-code", async (req, res, next) => {
         res.status(404).send({
           success: false,
           message: "This code has already been used or expired.",
-          error: 2,
         });
         return;
       }
@@ -108,7 +104,6 @@ app.post("/check-code", async (req, res, next) => {
         res.status(404).send({
           success: false,
           message: "This code has already been used or expired.",
-          error: 3,
         });
         return;
       }
@@ -141,7 +136,6 @@ app.post("/check-code", async (req, res, next) => {
         res.json({
           success: false,
           message: "Unexpected error, please try again",
-          error: 1,
         });
       }
     } catch (err) {

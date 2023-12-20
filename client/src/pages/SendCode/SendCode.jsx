@@ -4,7 +4,7 @@ import checkEmail from "../../util/checkEmail";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ReactiveButton from "reactive-button";
-import HandleErrorResponse from "../../components/HandleErrorResponse";
+import HandleAlert from "../../components/HandleAlert";
 import WaterMark from "../../components/WaterMark";
 import axios from "axios";
 import "./send.css";
@@ -21,15 +21,12 @@ const SendCode = () => {
   const sendEmailCode = async (email) => {
     setButtonStatus("loading");
     // Function to send the code to the users email input.
-
     if (checkEmail(email) === false) {
       // If the email is not valid, this displays an error message.
       setButtonStatus("error");
-
-      HandleErrorResponse("error", "Please enter a valid email address.");
+      HandleAlert("error", "Please enter a valid email address.");
     } else {
       // If the email is valid, send the code to the users email.
-
       try {
         axios
           .post(`http://${ipAddress}:${serverPort}/api/send-code`, {
@@ -37,27 +34,33 @@ const SendCode = () => {
           })
           .then(function (response) {
             setButtonStatus("success");
-
             if (response.data.success === true) {
               // Setting the email used to localStorage for later use.
-
               localStorage.setItem("emailUsed", email);
-              return navigate("/check-code");
+              HandleAlert("success", "Email sent successfully.");
+              setTimeout(() => {
+                console.log("sendCode - Email sent successfully");
+                navigate("/check-code");
+              }, 4000);
             }
           })
           .catch(function (err) {
             // Handle error state.
-            console.log(err);
-            console.log(email);
-
             setButtonStatus("error");
-            HandleErrorResponse(err);
+            HandleAlert(
+              "error",
+              "Uh oh! We ran into an erorr, please try again. - Error: " +
+                err.message
+            );
           });
       } catch (err) {
         // Handle error state.
-
         setButtonStatus("error");
-        HandleErrorResponse(err);
+        HandleAlert(
+          "error",
+          "Uh oh! We ran into an erorr, please try again. - Error: " +
+            err.message
+        );
       }
     }
   };
