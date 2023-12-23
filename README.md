@@ -56,7 +56,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About Email Verify
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Email-Verify Screen Shot](screenshot.png)
 
 Email-Verify is a full-stack application that facilitates email verification using Gmail SMTP for sending emails. 
 It is built with Express.js and Prisma on the backend, utilizing a PostgreSQL database. On the frontend, React and 
