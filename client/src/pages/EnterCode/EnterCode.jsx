@@ -17,7 +17,7 @@ const EnterCode = () => {
   const navigate = useNavigate();
 
   // Grabbing the correct ip and port for the server.
-  const serverPort = import.meta.env.VITE_REACT_APP_SERVER_PORT;
+  // const serverPort = import.meta.env.VITE_REACT_APP_SERVER_PORT;
   const ipAddress = import.meta.env.VITE_REACT_APP_IP_ADDRESS;
 
   const email = localStorage.getItem("emailUsed");
@@ -36,13 +36,10 @@ const EnterCode = () => {
     try {
       // Check the code against the database, searching with the code provided,
       // and with the email saved in localStorage.
-      const response = await axios.post(
-        `http://${ipAddress}:${serverPort}/api/check-code`,
-        {
-          email,
-          code,
-        }
-      );
+      const response = await axios.post(`${ipAddress}/api/check-code`, {
+        email,
+        code,
+      });
       const responseData = response.data;
       const codeData = response.data.data;
 

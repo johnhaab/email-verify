@@ -15,7 +15,7 @@ const SendCode = () => {
   const navigate = useNavigate();
 
   // Grabbing the correct ip and port for the server.
-  const serverPort = import.meta.env.VITE_REACT_APP_SERVER_PORT;
+  // const serverPort = import.meta.env.VITE_REACT_APP_SERVER_PORT;
   const ipAddress = import.meta.env.VITE_REACT_APP_IP_ADDRESS;
 
   const sendEmailCode = async (email) => {
@@ -29,7 +29,7 @@ const SendCode = () => {
       // If the email is valid, send the code to the users email.
       try {
         axios
-          .post(`http://${ipAddress}:${serverPort}/api/send-code`, {
+          .post(`${ipAddress}/api/send-code`, {
             email: email,
           })
           .then(function (response) {
