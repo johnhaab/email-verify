@@ -43,7 +43,6 @@ app.post("/send-code", async (req, res) => {
 
     // Send the verification email
     sendMail(options, (info) => {
-
       // Respond with success and message ID
       res.json({ success: true, id: info.messageId, code: newCode });
     });
@@ -110,8 +109,7 @@ app.post("/check-code", async (req, res, next) => {
 
       if (result !== null) {
         // Get the client's IP address from the X-Forwarded-For header
-        const ipAddress =
-          req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+        const ipAddress = req.socket.remoteAddress;
 
         // Update the code record to mark it as inactive and set expiration time to 0
         await prisma.code.update({
